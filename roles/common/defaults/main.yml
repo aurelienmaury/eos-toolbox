@@ -1,6 +1,7 @@
 ---
-common_lang: 'en'
+common_lang: 'fr'
 common_locales:
+  - 'fr_FR.UTF-8'
   - 'en_US.UTF-8'
 common_tzdata_area: 'Etc'
 common_tzdata_zone: 'UTC'

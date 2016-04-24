@@ -1,9 +1,9 @@
 ---
 galaxy_info:
   author: Aurélien Maury
-  description: Common configuration for wheezy/jessie servers
-  company: WeScale
-  license: Copyrights @wescale.fr
+  description: Bootstrap for ElementaryOS, tuned for an Asus-TP-200-S install
+  company: Humanity
+  license: GPLv3
   min_ansible_version: 2.0
   platforms:
     - name: Debian
