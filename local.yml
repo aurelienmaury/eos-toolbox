@@ -21,6 +21,6 @@
 
     - apt:
         deb="/opt/{{ item.file }}"
-      with_items: {{ kernel_pkgs }}
+      with_items: "{{ kernel_pkgs }}"
 
 
