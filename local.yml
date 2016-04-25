@@ -1,6 +1,12 @@
 ---
 - hosts: localhost
   become: yes
+  pre_tasks:
+    - assert:
+        that: ansible_distribution == '"elementary os"'
+    - assert:
+        that: ansible_distribution_release == 'freya'
+
   roles:
     - common
 
