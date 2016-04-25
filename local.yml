@@ -3,3 +3,24 @@
   become: yes
   roles:
     - common
+
+  vars:
+    kernel_pkgs:
+      - file: "linux-headers-4.4.8-040408_4.4.8-040408.201604200335_all.deb"
+        sum: "a8df85bc54668e402a5a0c819b07b6104ac995c939d9a35935dc4d3b3ad401e5"
+      - file: "linux-headers-4.4.8-040408-generic_4.4.8-040408.201604200335_amd64.deb"
+        sum: "dd7dc3f73c0ed222d0befc0437076ec559d23cca51ea7fba6b29736250789d9c"
+      - file: "linux-image-4.4.8-040408-generic_4.4.8-040408.201604200335_amd64.deb"
+        sum: "2f707935676a5df8653dd4fe7f71f587dfdec22a733850721df72c399d51066e"
+  tasks:
+    - get_url:
+        url="http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.4.8-wily/{{ item.file }}"
+        dest="/opt/{{ item.file }}"
+        checksum="sha256:{{ item.sum }}"
+      with_items: kernel_pkgs
+
+    - apt:
+        deb="/opt/{{ item.file }}"
+      with_items: kernel_pkgs
+
+
