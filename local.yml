@@ -32,6 +32,9 @@
         deb="/opt/{{ item.file }}"
       with_items: "{{ kernel_pkgs }}"
 
+    - name: Gnome keyring library
+      apt:
+        name=libgnome-keyring0
 
     - name: gather material for Scratch 2.0 install
       get_url:
@@ -45,3 +48,12 @@
         - url: "https://scratch.mit.edu/scratchr2/static/sa/Scratch-445.2.air"
           file: "Scratch-445.2.air"
           sum: "cdb8523ac95c7166ae60368b179b169b6543197d0e862d894016485269b9f9de"
+
+    - name: load kernel modules
+      lineinfile:
+        dest="/etc/modules-load.d/touchpad.conf
+        line="elan_i2c"
+        create=yes
+        owner=root
+        group=root
+        mode=0644
