@@ -20,12 +20,28 @@
         sum: "2f707935676a5df8653dd4fe7f71f587dfdec22a733850721df72c399d51066e"
 
   tasks:
-    - get_url:
+    - name: get all debian packages for kernel 4.4.8
+      get_url:
         url="http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.4.8-wily/{{ item.file }}"
         dest="/opt/{{ item.file }}"
         checksum="sha256:{{ item.sum }}"
       with_items: kernel_pkgs
 
-    - apt:
+    - name: debian packages for kernel 4.4.8 are installed
+      apt:
         deb="/opt/{{ item.file }}"
       with_items: "{{ kernel_pkgs }}"
+
+
+    - name: gather material for Scratch 2.0 install
+      get_url:
+        url="{{ item.url }}"
+        dest="/opt/{{ item.file }}"
+        checksum="sha256:{{ item.sum }}"
+      with_items:
+        - url: "http://airdownload.adobe.com/air/lin/download/2.6/AdobeAIRInstaller.bin"
+          file: "AdobeAIRInstaller.bin"
+          sum: "2c89002bbfd13f7c119b66380e6023a1268a7b8d66d4a2c5f287bb656ed90005"
+        - url: "https://scratch.mit.edu/scratchr2/static/sa/Scratch-445.2.air"
+          file: "Scratch-445.2.air"
+          sum: "cdb8523ac95c7166ae60368b179b169b6543197d0e862d894016485269b9f9de"
