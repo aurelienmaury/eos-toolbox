@@ -51,7 +51,7 @@
 
     - name: load kernel modules
       lineinfile:
-        dest="/etc/modules-load.d/touchpad.conf
+        dest="/etc/modules-load.d/touchpad.conf"
         line="elan_i2c"
         create=yes
         owner=root
