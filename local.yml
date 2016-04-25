@@ -70,7 +70,7 @@
       shell: rm -r /lib/firmware/ath10k/QCA6174
 
     - name: copy firmware in place
-      shelll: cp -r /opt/ath10k-firmware-master/QCA6174 /lib/firmware/ath10k/
+      shell: cp -r /opt/ath10k-firmware-master/QCA6174 /lib/firmware/ath10k/
       creates: "/lib/firmware/ath10k/QCA6174"
 
     - set_fact:
