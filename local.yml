@@ -67,25 +67,22 @@
         dest="/opt/"
 
     - name: remove old firmware
-      shell: rm -r /lib/firmware/ath10k/QCA6174
+      shell: rm -r /lib/firmware/ath10k/QCA6174 && rm -r /lib/firmware/ath10k/QCA9377
 
     - name: copy firmware in place
-      shell: cp -r /opt/ath10k-firmware-master/QCA6174 /lib/firmware/ath10k/
+      shell: cp -r /opt/ath10k-firmware-master/QCA9377 /lib/firmware/ath10k/
       args:
         creates: "/lib/firmware/ath10k/QCA6174"
 
     - set_fact:
         firmware_2_1_dir: "/lib/firmware/ath10k/QCA6174/hw2.1"
         firmware_3_0_dir: "/lib/firmware/ath10k/QCA6174/hw3.0"
+        firm_97: "/lib/firmware/ath10k/QCA9377/hw1.0"
 
     - name: rename firmware files
       shell: >
-        mv {{ firmware_2_1_dir }}/firmware-5.bin_SW_RM.1.1.1-00157-QCARMSWPZ-1 {{ firmware_2_1_dir }}/firmware-5.bin
+        mv {{ firm_97 }}/firmware-5.bin_WLAN.TF.1.0-00267-1 {{ firm_97 }}/firmware-5.bin
       args:
-        creates: "{{ firmware_2_1_dir}}/firmware-5.bin"
+        creates: "{{ firm_97 }}/firmware-5.bin"
 
-    - name: rename firmware files
-      shell: >
-        mv {{ firmware_3_0_dir}}/firmware-4.bin_WLAN.RM.2.0-00180-QCARMSWPZ-1 {{ firmware_3_0_dir}}/firmware-4.bin
-      args:
-        creates: "{{ firmware_3_0_dir}}/firmware-4.bin"
+   
