@@ -5,15 +5,9 @@
   pre_tasks:
     - assert:
         that: ansible_distribution == '"elementary os"'
+
     - assert:
         that: ansible_distribution_release == 'freya'
-
-    - apt_repository:
-        repo="ppa:fkrull/deadsnakes-python2.7"
-        update_cache=yes
-
-    - apt:
-        upgrade=full
 
   roles:
     - common
@@ -54,7 +48,7 @@
 
 # === Enable touchpad module =================================================================
 
-    - name: Elan I2C
+    - name: activate invisible touchpad (Elan I2C)
       lineinfile:
         dest="/etc/modules-load.d/touchpad.conf"
         line="elan_i2c"
@@ -69,6 +63,9 @@
         firmware_zip: "ath10k_firmwares.zip"
         firmware_dir: "/lib/firmware/ath10k/"
         firmware_version: "QCA9377"
+
+    - set_fact:
+        firmware_subdir: "{{ firmware_dir }}/{{ firmware_version }}/hw1.0"
 
     - name: wifi drivers archive available
       get_url:
@@ -95,16 +92,13 @@
       args:
         creates: "{{ firmware_dir }}/{{ firmware_version }}"
 
-    - set_fact:
-        firmware_subdir: "{{ firmware_dir }}/{{ firmware_version }}/hw1.0"
-
     - name: rename firmware files
       shell: >
         mv {{ firmware_subdir }}/firmware-5.bin_WLAN.TF.1.0-00267-1 {{ firmware_subdir }}/firmware-5.bin
       args:
         creates: "{{ firmware_subdir }}/firmware-5.bin"
 
-# ==============================================================================================
+# === AdobeAir & Scratch 2 install ===========================================================
 
     - name: AdobeAir needed 32bit libraries
       apt:
@@ -127,7 +121,7 @@
         src=/usr/lib/x86_64-linux-gnu/libgnome-keyring.so.0
         dest=/usr/lib/libgnome-keyring.so.0
         state=link
-        
+
     - name: links
       file:
         src=/usr/lib/x86_64-linux-gnu/libgnome-keyring.so.0.2.0
@@ -143,5 +137,5 @@
     - name: get Scratch 2.0 offline-editor
       get_url:
         url="http://scratch.mit.edu/scratchr2/static/sa/Scratch-445.2.air"
-        dest="/usr/local/bin/Scratch-445.2.air"
+        dest="{{ dl_dir }}/Scratch-445.2.air"
         checksum="sha256:cdb8523ac95c7166ae60368b179b169b6543197d0e862d894016485269b9f9de"
