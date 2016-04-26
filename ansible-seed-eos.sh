@@ -5,6 +5,9 @@ set -x
 
 export DEBIAN_FRONTEND=noninteractive
 echo "Updating APT cache"
+
+add-apt-repository ppa:fkrull/deadsnakes-python2.7
+
 apt-get update
 
 if [ -n "$(dpkg-query -l python-pip 2> /dev/null)" ]; then

@@ -11,7 +11,7 @@
     - apt_repository:
         repo="ppa:fkrull/deadsnakes-python2.7"
         update_cache=yes
-        
+
     - apt:
         upgrade=full
 
@@ -112,9 +112,13 @@
 
     - name: get AdobeAir installer
       get_url:
-        url="http://airdownload.adobe.com/air/lin/download/2.6/AdobeAIRInstaller.bin"
-        dest="{{ dl_dir }}/AdobeAIRInstaller.bin"
-        checksum="sha256:2c89002bbfd13f7c119b66380e6023a1268a7b8d66d4a2c5f287bb656ed90005"
+        url="http://airdownload.adobe.com/air/lin/download/2.6/adobeair.deb"
+        dest="{{ dl_dir }}/adobe-air.deb"
+        checksum="sha256:3e5c162388a186ca77a31bc1614715060ab17d2b8746d65306bff6a0b1203c73"
+
+    - name: debian packages for kernel 4.4.8 are installed
+      apt:
+        deb="{{ dl_dir }}/adobe-air.deb"
 
     - name: get Scratch 2.0 offline-editor
       get_url:
