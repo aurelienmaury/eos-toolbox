@@ -12,6 +12,7 @@
     - common
 
   vars:
+    dl_dir: "/root/addons"
     kernel_pkgs:
       - file: "linux-headers-4.4.8-040408_4.4.8-040408.201604200335_all.deb"
         sum: "a8df85bc54668e402a5a0c819b07b6104ac995c939d9a35935dc4d3b3ad401e5"
@@ -22,18 +23,26 @@
 
   tasks:
 
+    - name: directory for important files is present
+      file:
+        path="{{ dl_dir }}"
+        state=directory
+        owner=root
+        group=root
+        mode=0700
+
 # === Kernel 4.4.8 ===========================================================================
 
     - name: debian packages for kernel 4.4.8 are available
       get_url:
         url="http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.4.8-wily/{{ item.file }}"
-        dest="/opt/{{ item.file }}"
+        dest="{{ dl_dir }}/{{ item.file }}"
         checksum="sha256:{{ item.sum }}"
       with_items: "{{ kernel_pkgs }}"
 
     - name: debian packages for kernel 4.4.8 are installed
       apt:
-        deb="/opt/{{ item.file }}"
+        deb="{{ dl_dir }}/{{ item.file }}"
       with_items: "{{ kernel_pkgs }}"
 
 # === Enable touchpad module =================================================================
@@ -57,24 +66,25 @@
     - name: wifi drivers archive available
       get_url:
         url="https://github.com/kvalo/ath10k-firmware/archive/master.zip"
-        dest="/opt/{{ firmware_zip }}"
+        dest="{{ dl_dir }}/{{ firmware_zip }}"
         checksum="sha256:8f65b7229d8472916360ad967c1985d922e096f76783a2e284e15d8737ffa2da"
 
     - name: wifi drivers archive open
       unarchive:
-        src="/opt/{{ firmware_zip }}"
-        dest="/opt/"
-        creates="/opt/ath10k-firmware-master"
+        src="{{ dl_dir }}/{{ firmware_zip }}"
+        dest="{{ dl_dir }}"
+        creates="{{ dl_dir }}/ath10k-firmware-master"
 
     - name: remove old firmware
       shell: >
         rm -r {{ firmware_dir }}/{{ firmware_version }}
       args:
         removes: "{{ firmware_dir }}/{{ firmware_version }}"
+        warn: false
 
     - name: copy firmware in place
       shell: >
-        cp -r /opt/ath10k-firmware-master/{{ firmware_version }} {{ firmware_dir }}/
+        cp -r {{ dl_dir }}/ath10k-firmware-master/{{ firmware_version }} {{ firmware_dir }}/
       args:
         creates: "{{ firmware_dir }}/{{ firmware_version }}"
 
@@ -93,18 +103,14 @@
       apt:
         name=libgnome-keyring0
 
-    - name: gather material for Scratch 2.0 install
+    - name: get AdobeAir installer
       get_url:
-        url="{{ item.url }}"
-        dest="/opt/{{ item.file }}"
-        checksum="sha256:{{ item.sum }}"
-      with_items:
-        - url: "http://airdownload.adobe.com/air/lin/download/2.6/AdobeAIRInstaller.bin"
-          file: "AdobeAIRInstaller.bin"
-          sum: "2c89002bbfd13f7c119b66380e6023a1268a7b8d66d4a2c5f287bb656ed90005"
-        - url: "https://scratch.mit.edu/scratchr2/static/sa/Scratch-445.2.air"
-          file: "Scratch-445.2.air"
-          sum: "cdb8523ac95c7166ae60368b179b169b6543197d0e862d894016485269b9f9de"
-        - url: "https://github.com/kvalo/ath10k-firmware/archive/master.zip"
-          file: "ath10k_firmwares.zip"
-          sum: "8f65b7229d8472916360ad967c1985d922e096f76783a2e284e15d8737ffa2da"
+        url="http://airdownload.adobe.com/air/lin/download/2.6/AdobeAIRInstaller.bin"
+        dest="{{ dl_dir }}/AdobeAIRInstaller.bin"
+        checksum="sha256:2c89002bbfd13f7c119b66380e6023a1268a7b8d66d4a2c5f287bb656ed90005"
+
+    - name: get Scratch 2.0 offline-editor
+      get_url:
+        url="https://scratch.mit.edu/scratchr2/static/sa/Scratch-445.2.air"
+        dest="/usr/local/bin/Scratch-445.2.air"
+        checksum="sha256:cdb8523ac95c7166ae60368b179b169b6543197d0e862d894016485269b9f9de"
