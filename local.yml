@@ -122,6 +122,18 @@
         - "libcanberra-gtk-module:i386"
         - "gtk2-engines-murrine:i386"
 
+    - name: links
+      file:
+        src=/usr/lib/x86_64-linux-gnu/libgnome-keyring.so.0
+        dest=/usr/lib/libgnome-keyring.so.0
+        state=link
+        
+    - name: links
+      file:
+        src=/usr/lib/x86_64-linux-gnu/libgnome-keyring.so.0.2.0
+        dest=/usr/lib/libgnome-keyring.so.0.2.0
+        state=link
+
     - name: get AdobeAir installer
       get_url:
         url="http://airdownload.adobe.com/air/lin/download/2.6/AdobeAIRInstaller.bin"
