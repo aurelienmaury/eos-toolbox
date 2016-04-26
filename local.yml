@@ -111,6 +111,6 @@
 
     - name: get Scratch 2.0 offline-editor
       get_url:
-        url="https://scratch.mit.edu/scratchr2/static/sa/Scratch-445.2.air"
+        url="http://scratch.mit.edu/scratchr2/static/sa/Scratch-445.2.air"
         dest="/usr/local/bin/Scratch-445.2.air"
         checksum="sha256:cdb8523ac95c7166ae60368b179b169b6543197d0e862d894016485269b9f9de"
