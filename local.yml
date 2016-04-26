@@ -8,6 +8,13 @@
     - assert:
         that: ansible_distribution_release == 'freya'
 
+    - apt_repository:
+        repo="ppa:fkrull/deadsnakes-python2.7"
+        update_cache=yes
+        
+    - apt:
+        upgrade=full
+
   roles:
     - common
 
